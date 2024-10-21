@@ -1,0 +1,14 @@
+-- creates a trigger that decreases the quantity of an item
+-- after adding a new order.
+CREATE TRIGGER update_price
+AFTER INSERT ON orders
+FOR EACH ROW
+BEGIN
+  UPDATE items
+  SET quantity = quantity - (
+    SELECT SUN(number)
+    FROM orders
+    WHERE item_name = items.name
+  )
+  WHERE name = NEW.item_name;
+END;

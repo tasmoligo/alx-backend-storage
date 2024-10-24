@@ -25,7 +25,7 @@ def url_count(method):
         cache_track = "count:" + url
         html_content = method(url)
         redisInstance.incr(cache_track)
-        redisInstance.set(cache_key, html_content)
+        redisInstance.set(cache_key, html_content, ex=1)
         redisInstance.expire(cache_key, 10)
         return html_content
     return wrapper
@@ -42,5 +42,3 @@ def get_page(url: str) -> str:
 
 if __name__ == "__main__":
     r = get_page("http://slowwly.robertomurray.co.uk")
-    print(r)
-    print(redisInstance.ttl(r))
